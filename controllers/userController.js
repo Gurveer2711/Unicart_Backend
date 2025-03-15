@@ -5,13 +5,13 @@ import User from "../models/userModel.js";
 // @route   GET /api/user/profile
 // @access  Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user.id);
   if (user) {
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      phoneNumber: user.phone,
+      phone: user.phone,
       address: user.address,
       role: user.role,
     });
@@ -25,7 +25,7 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/user/profile
 // @access  Private
 export const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user.id);
 
   if (user) {
     user.name = req.body.name || user.name;
@@ -44,6 +44,8 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       role: updatedUser.role,
+      address: updatedUser.address,
+      phone: updatedUser.phone
     });
   } else {
     res.status(404);
