@@ -25,21 +25,16 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  // Create user
-  const user = await User.create({
+  const newUser = new User({
     name,
     email,
-    password,
+    password
   });
 
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      token: generateToken(user._id),
-    });
+  const savedUser = await newUser.save();
+
+  if (savedUser) {
+    return res.status(200).redirect("/api/user/login");
   } else {
     res.status(400);
     throw new Error("Invalid user data");

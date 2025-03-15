@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
@@ -17,6 +17,18 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
       select: false,
+    },
+    phone: {
+      type: String,
+      unique: true,
+      match: [/^\d{10}$/, "Please enter a valid 10-digit phone number"],
+    },
+    address: {
+      street: { type: String },
+      city: { type: String },
+      state: { type: String },
+      zipCode: { type: String },
+      country: { type: String },
     },
     role: {
       type: String,
@@ -40,4 +52,6 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+
+export default User;

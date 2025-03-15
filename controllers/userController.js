@@ -11,6 +11,8 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      phoneNumber: user.phone,
+      address: user.address,
       role: user.role,
     });
   } else {
@@ -28,7 +30,9 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-
+    user.address = req.body.address || user.address;
+    user.phone = req.body.phone || user.phone;
+    
     if (req.body.password) {
       user.password = req.body.password;
     }
