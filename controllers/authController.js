@@ -28,13 +28,14 @@ export const registerUser = asyncHandler(async (req, res) => {
   const newUser = new User({
     name,
     email,
-    password
+    password,
+    phone: "",
   });
 
   const savedUser = await newUser.save();
 
   if (savedUser) {
-    return res.status(200).redirect("/api/user/login");
+    res.status(200).json({ message: "Success", redirect: "/api/user/login" });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
