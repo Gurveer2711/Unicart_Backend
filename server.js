@@ -1,15 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
-import rateLimit from "express-rate-limit";
-import helmet from "helmet";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
-
+import cookieParser from "cookie-parser";
 // Load environment variables
 dotenv.config();
 
@@ -18,9 +15,9 @@ connectDB();
 
 const app = express();
 
-// Security middleware
 app.use(express.json());
-
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);

@@ -1,36 +1,26 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
-
+import cookieParser from "cookie-parser";
 // Protect routes
 export const protect = asyncHandler(async (req, res, next) => {
-  let token;
-
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      // Get token from header
-      token = req.headers.authorization.split(" ")[1];
-
-      // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Get user from the token
-      req.user = await User.findById(decoded.id).select("-password");
-
-      next();
-    } catch (error) {
-      console.error(error);
-      res.status(401);
-      throw new Error("Not authorized, token failed");
-    }
-  }
+  const token = req.cookies.token; // Access the token from the cookie
 
   if (!token) {
-    res.status(401);
-    throw new Error("Not authorized, no token");
+    return res
+      .status(401)
+      .json({ message: "Access denied.Please log in again" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    console.log("req.user:", req.user);// Attach the decoded user info to the request
+    next(); // Proceed to the next middleware/route handler
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ message: "Invalid or expired token. Please log in again." });
   }
 });
 
