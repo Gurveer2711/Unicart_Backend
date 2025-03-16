@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import imageRoutes from "./routes/imageRoutes.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 import cookieParser from "cookie-parser";
 // Load environment variables
@@ -23,8 +24,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
-app.use("./uploadImage", express.static("uploads")); // Serve local uploads
-app.use("/api/upload", uploadRoutes);
+app.use("/uploads", express.static("uploads")); // Serve local uploads
+app.use("/api/image", imageRoutes);
 // Error handling middleware
 app.use(errorHandler);
 
