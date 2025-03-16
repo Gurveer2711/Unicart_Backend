@@ -40,7 +40,7 @@ export const addProduct = asyncHandler(async (req, res) => {
     image,
     category,
     countInStock,
-    createdBy: req.user._id,
+    createdBy: req.user.id,
   });
 
   if (product) {
