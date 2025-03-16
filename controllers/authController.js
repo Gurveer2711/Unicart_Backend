@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+import Cart from "../models/cartModel.js";
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -18,14 +19,15 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const newUser = new User({
+  const user = new User({
     name,
     email,
     password,
   });
 
-  const savedUser = await newUser.save();
-
+  const cart = await Cart.create({ user: user._id, items: [] });
+  user.cart = cart._id;
+  const savedUser = await user.save();
   if (savedUser) {
     res.status(200).json({
       message: "Registration Successful",
