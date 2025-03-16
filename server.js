@@ -23,7 +23,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
-
+app.use("./uploadImage", express.static("uploads")); // Serve local uploads
+app.use("/api/upload", uploadRoutes);
 // Error handling middleware
 app.use(errorHandler);
 
